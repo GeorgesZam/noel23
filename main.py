@@ -11,6 +11,10 @@ users = {
 def check_login(username, password):
     return username in users and users[username] == password
 
+# Initialisation du session state pour les souvenirs
+if 'souvenirs' not in st.session_state:
+    st.session_state['souvenirs'] = []
+
 # Login form
 username = st.sidebar.text_input("Username")
 password = st.sidebar.text_input("Password", type="password")
@@ -35,12 +39,19 @@ if st.sidebar.button('Login'):
             bytes_data = uploaded_file.read()
             st.image(bytes_data, caption=uploaded_file.name, use_column_width=True)
 
+        # Souvenirs et histoires
         st.write("Partagez vos souvenirs et histoires de famille ici :")
         user_memory = st.text_area("Votre souvenir ou histoire", height=150)
 
         if st.button('Partager le souvenir'):
-            st.write("Merci de partager : ", user_memory)
+            st.session_state['souvenirs'].append(user_memory)
+            st.success("Souvenir partagé !")
 
+        # Afficher tous les souvenirs
+        if st.session_state['souvenirs']:
+            st.write("Souvenirs partagés :")
+            for souvenir in st.session_state['souvenirs']:
+                st.text_area("Souvenir", value=souvenir, height=100, key=souvenir)
 
     else:
         st.error('Incorrect username or password')
