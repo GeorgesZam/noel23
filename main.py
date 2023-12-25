@@ -27,11 +27,20 @@ if st.sidebar.button('Login'):
                  "I am fulfilled because of you, and living with you every day is a joy for me. "
                  "I love you, and Merry Christmas!!!")
 
-        # Image upload section
-        uploaded_file = st.file_uploader("Choose an image...", type=['jpg', 'jpeg', 'png'])
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file)
-            st.image(image, caption='Uploaded Image.', use_column_width=True)
+        st.title("Album de famille")
+
+        # Téléchargement des photos
+        uploaded_files = st.file_uploader("Téléchargez vos photos de famille", accept_multiple_files=True)
+        for uploaded_file in uploaded_files:
+            bytes_data = uploaded_file.read()
+            st.image(bytes_data, caption=uploaded_file.name, use_column_width=True)
+
+        st.write("Partagez vos souvenirs et histoires de famille ici :")
+        user_memory = st.text_area("Votre souvenir ou histoire", height=150)
+
+        if st.button('Partager le souvenir'):
+            st.write("Merci de partager : ", user_memory)
+
 
     else:
         st.error('Incorrect username or password')
